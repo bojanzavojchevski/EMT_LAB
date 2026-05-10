@@ -5,14 +5,21 @@ import mk.ukim.finki.emt.accommodationrental.model.domain.Accommodation;
 import mk.ukim.finki.emt.accommodationrental.model.domain.Host;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.CreateAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.UpdateAccommodationDto;
+import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCategory;
 import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCondition;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationInBadConditionException;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationNotAvailableException;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationNotFoundException;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.HostNotFoundException;
+import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationExtendedProjection;
+import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationShortProjection;
 import mk.ukim.finki.emt.accommodationrental.repository.AccommodationRepository;
 import mk.ukim.finki.emt.accommodationrental.repository.HostRepository;
 import mk.ukim.finki.emt.accommodationrental.service.AccommodationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,5 +100,79 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodation.setNumRooms(accommodation.getNumRooms() - 1);
 
         return this.accommodationRepository.save(accommodation);
+    }
+
+    @Override
+    public Page<Accommodation> findAllWithFilters(
+            Integer page,
+            Integer size,
+            String sortBy,
+            String sortDirection,
+            AccommodationCategory category,
+            Long hostId,
+            Long countryId,
+            Integer numRooms,
+            Boolean available
+    ) {
+        Pageable pageable = this.createPageable(page, size, sortBy, sortDirection);
+
+        return this.accommodationRepository.findAllWithFilters(
+                category,
+                hostId,
+                countryId,
+                numRooms,
+                available,
+                pageable
+        );
+    }
+
+    @Override
+    public Page<AccommodationShortProjection> findAllShortProjection(
+            Integer page,
+            Integer size,
+            String sortBy,
+            String sortDirection
+    )
+    {
+        Pageable pageable = this.createPageable(page, size, sortBy, sortDirection);
+
+        return this.accommodationRepository.findAllShortProjection(pageable);
+    }
+
+    @Override
+    public Page<AccommodationExtendedProjection> findAllExtendedProjection(
+            Integer page,
+            Integer size,
+            String sortBy,
+            String sortDirection
+    ) {
+        Pageable pageable = this.createPageable(page, size, sortBy, sortDirection);
+
+        return this.accommodationRepository.findAllExtendedProjection(pageable);
+    }
+
+
+
+
+
+    private Pageable createPageable(Integer page, Integer size, String sortBy, String sortDirection) {
+        int pageNumber = page != null && page >= 0 ? page : 0;
+        int pageSize = size != null && size > 0 ? size : 10;
+
+        String safeSortBy;
+
+        if ("name".equals(sortBy)) {
+            safeSortBy = "name";
+        } else if ("createdAt".equals(sortBy)) {
+            safeSortBy = "createdAt";
+        } else {
+            safeSortBy = "createdAt";
+        }
+
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDirection)
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        return PageRequest.of(pageNumber, pageSize, Sort.by(direction, safeSortBy));
     }
 }

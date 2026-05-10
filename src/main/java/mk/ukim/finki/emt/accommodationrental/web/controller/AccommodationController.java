@@ -6,7 +6,11 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.CreateAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.DisplayAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.UpdateAccommodationDto;
+import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCategory;
+import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationExtendedProjection;
+import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationShortProjection;
 import mk.ukim.finki.emt.accommodationrental.service.AccommodationService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +30,61 @@ public class AccommodationController
                 .stream()
                 .map(DisplayAccommodationDto::from)
                 .toList();
+    }
+
+    @GetMapping("/search")
+    public Page<DisplayAccommodationDto> findAllWithFilters(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection,
+            @RequestParam(required = false) AccommodationCategory category,
+            @RequestParam(required = false) Long hostId,
+            @RequestParam(required = false) Long countryId,
+            @RequestParam(required = false) Integer numRooms,
+            @RequestParam(required = false) Boolean available
+    ) {
+        return this.accommodationService.findAllWithFilters(
+                page,
+                size,
+                sortBy,
+                sortDirection,
+                category,
+                hostId,
+                countryId,
+                numRooms,
+                available
+        ).map(DisplayAccommodationDto::from);
+    }
+
+    @GetMapping("/projections/short")
+    public Page<AccommodationShortProjection> findAllShortProjection(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection
+    ) {
+        return this.accommodationService.findAllShortProjection(
+                page,
+                size,
+                sortBy,
+                sortDirection
+        );
+    }
+
+    @GetMapping("/projections/extended")
+    public Page<AccommodationExtendedProjection> findAllExtendedProjection(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection
+    ) {
+        return this.accommodationService.findAllExtendedProjection(
+                page,
+                size,
+                sortBy,
+                sortDirection
+        );
     }
 
 
