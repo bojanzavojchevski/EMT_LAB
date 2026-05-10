@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.CreateAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.DisplayAccommodationDto;
+import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.DisplayAccommodationWithHostCountryDto;
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.UpdateAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCategory;
 import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationExtendedProjection;
@@ -85,6 +86,21 @@ public class AccommodationController
                 sortBy,
                 sortDirection
         );
+    }
+
+    @GetMapping("/with-host-country")
+    public Page<DisplayAccommodationWithHostCountryDto> findAllWithHostAndCountry(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection
+    ) {
+        return this.accommodationService.findAllWithHostAndCountry(
+                page,
+                size,
+                sortBy,
+                sortDirection
+        ).map(DisplayAccommodationWithHostCountryDto::from);
     }
 
 

@@ -152,6 +152,19 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
 
+    @Override
+    public Page<Accommodation> findAllWithHostAndCountry(
+            Integer page,
+            Integer size,
+            String sortBy,
+            String sortDirection
+    ) {
+        Pageable pageable = this.createPageable(page, size, sortBy, sortDirection);
+
+        return this.accommodationRepository.findAllWithHostAndCountry(pageable);
+    }
+
+
 
 
 

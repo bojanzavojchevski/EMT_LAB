@@ -49,4 +49,11 @@ public interface AccommodationService
             String sortBy,
             String sortDirection
     );
+
+    Page<Accommodation> findAllWithHostAndCountry(
+            Integer page,
+            Integer size,
+            String sortBy,
+            String sortDirection
+    );
 }
