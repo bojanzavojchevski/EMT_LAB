@@ -7,6 +7,7 @@ import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.CreateAccomm
 import mk.ukim.finki.emt.accommodationrental.model.dto.accomodation.UpdateAccommodationDto;
 import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCategory;
 import mk.ukim.finki.emt.accommodationrental.model.enumeration.AccommodationCondition;
+import mk.ukim.finki.emt.accommodationrental.model.events.AccommodationRentedEvent;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationInBadConditionException;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationNotAvailableException;
 import mk.ukim.finki.emt.accommodationrental.model.exceptions.AccommodationNotFoundException;
@@ -16,6 +17,7 @@ import mk.ukim.finki.emt.accommodationrental.model.projection.AccommodationShort
 import mk.ukim.finki.emt.accommodationrental.repository.AccommodationRepository;
 import mk.ukim.finki.emt.accommodationrental.repository.HostRepository;
 import mk.ukim.finki.emt.accommodationrental.service.AccommodationService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final HostRepository hostRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public List<Accommodation> findAll() {
@@ -99,7 +102,17 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         accommodation.setNumRooms(accommodation.getNumRooms() - 1);
 
-        return this.accommodationRepository.save(accommodation);
+        Accommodation savedAccommodation = this.accommodationRepository.save(accommodation);
+
+        this.applicationEventPublisher.publishEvent(
+                new AccommodationRentedEvent(
+                        savedAccommodation.getId(),
+                        savedAccommodation.getName(),
+                        savedAccommodation.getNumRooms()
+                )
+        );
+
+        return savedAccommodation;
     }
 
     @Override
