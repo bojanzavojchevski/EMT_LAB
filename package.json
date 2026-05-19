@@ -1,0 +1,17 @@
+{
+  "name": "accommodation-rental",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:db": "cd accommodation-rental-backend && docker compose up -d",
+    "dev:backend": "cd accommodation-rental-backend && mvnw.cmd spring-boot:run",
+    "dev:frontend": "cd accommodation-rental-frontend && npm run dev",
+    "dev": "npm run dev:db && concurrently -n backend,frontend \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:backend": "cd accommodation-rental-backend && mvnw.cmd clean test",
+    "build:frontend": "cd accommodation-rental-frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
