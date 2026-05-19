@@ -2,8 +2,7 @@
 
 Accommodation Rental is a full-stack laboratory project for the subject **Електронска и мобилна трговија** at FINKI.
 
-The application allows users to browse accommodations, hosts, and countries.  
-Authenticated users can read data, while administrators can manage all entities through CRUD operations.
+The application allows authenticated users to browse accommodations, hosts, and countries. Administrators can manage all entities through CRUD operations.
 
 ## Project Structure
 
@@ -14,9 +13,9 @@ accommodation-rental
 └─ docs
 ```
 
-## Backend
+## Tech Stack
 
-The backend is built with:
+### Backend
 
 - Java
 - Spring Boot
@@ -37,9 +36,7 @@ Backend location:
 accommodation-rental-backend
 ```
 
-## Frontend
-
-The frontend is built with:
+### Frontend
 
 - React
 - TypeScript
@@ -112,7 +109,7 @@ From the project root:
 npm run dev
 ```
 
-Expected URLs:
+Expected local URLs:
 
 ```text
 Backend:  http://localhost:8080
@@ -151,7 +148,7 @@ docker compose exec db psql -U emt -d accommodation_rental -c "UPDATE users SET 
 
 After changing the role, log out and log in again so the frontend stores the updated role.
 
-## Implemented Features
+## Features
 
 - JWT register/login
 - JWT token and role storage in localStorage
@@ -178,7 +175,7 @@ POST /api/auth/register
 POST /api/auth/login
 ```
 
-The authentication response contains:
+Example authentication response:
 
 ```json
 {
@@ -239,40 +236,27 @@ Protected routes:
 /countries/:id
 ```
 
-## Manual Test Checklist
+## Testing
 
-### Anonymous User
+Backend tests:
 
-- [ ] Open `/`
-- [ ] Try opening `/accommodations`
-- [ ] Confirm redirect to `/login`
-- [ ] Try opening `/hosts`
-- [ ] Confirm redirect to `/login`
-- [ ] Try opening `/countries`
-- [ ] Confirm redirect to `/login`
+```powershell
+cd accommodation-rental-backend
+.\mvnw clean test
+```
 
-### Normal USER
+Frontend build:
 
-- [ ] Register a new user
-- [ ] Login as normal user
-- [ ] Open accommodations page
-- [ ] Open hosts page
-- [ ] Open countries page
-- [ ] Confirm Add/Edit/Delete buttons are hidden
+```powershell
+cd accommodation-rental-frontend
+npm run build
+```
 
-### ADMIN
+Manual verification:
 
-- [ ] Login as admin
-- [ ] Confirm Add/Edit/Delete buttons are visible
-- [ ] Add country
-- [ ] Edit country
-- [ ] Delete country
-- [ ] Add host
-- [ ] Edit host
-- [ ] Delete host if not referenced by accommodation
-- [ ] Add accommodation
-- [ ] Edit accommodation
-- [ ] Delete accommodation
+- Anonymous users can access only the home page.
+- Normal users can view accommodations, hosts, and countries.
+- Admin users can create, update, and delete accommodations, hosts, and countries.
 
 ## Documentation
 
