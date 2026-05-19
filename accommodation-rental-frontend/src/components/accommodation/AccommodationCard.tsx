@@ -4,6 +4,9 @@ import type { Accommodation } from "../../types/accommodation";
 
 interface AccommodationCardProps {
     accommodation: Accommodation;
+    canManage: boolean;
+    onEdit: (accommodation: Accommodation) => void;
+    onDelete: (id: number) => void;
 }
 
 const getHostName = (accommodation: Accommodation) => {
@@ -22,7 +25,12 @@ const getHostName = (accommodation: Accommodation) => {
     return accommodation.host?.name ?? "N/A";
 };
 
-const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
+const AccommodationCard = ({
+                               accommodation,
+                               canManage,
+                               onEdit,
+                               onDelete,
+                           }: AccommodationCardProps) => {
     return (
         <Card>
             <CardContent>
@@ -56,6 +64,22 @@ const AccommodationCard = ({ accommodation }: AccommodationCardProps) => {
                 >
                     Details
                 </Button>
+
+                {canManage && (
+                    <>
+                        <Button size="small" onClick={() => onEdit(accommodation)}>
+                            Edit
+                        </Button>
+
+                        <Button
+                            size="small"
+                            color="error"
+                            onClick={() => onDelete(accommodation.id)}
+                        >
+                            Delete
+                        </Button>
+                    </>
+                )}
             </CardActions>
         </Card>
     );

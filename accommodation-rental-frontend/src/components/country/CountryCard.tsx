@@ -4,9 +4,17 @@ import type { Country } from "../../types/country";
 
 interface CountryCardProps {
     country: Country;
+    canManage: boolean;
+    onEdit: (country: Country) => void;
+    onDelete: (id: number) => void;
 }
 
-const CountryCard = ({ country }: CountryCardProps) => {
+const CountryCard = ({
+                         country,
+                         canManage,
+                         onEdit,
+                         onDelete,
+                     }: CountryCardProps) => {
     return (
         <Card>
             <CardContent>
@@ -27,6 +35,25 @@ const CountryCard = ({ country }: CountryCardProps) => {
                 >
                     Details
                 </Button>
+
+                {canManage && (
+                    <>
+                        <Button
+                            size="small"
+                            onClick={() => onEdit(country)}
+                        >
+                            Edit
+                        </Button>
+
+                        <Button
+                            size="small"
+                            color="error"
+                            onClick={() => onDelete(country.id)}
+                        >
+                            Delete
+                        </Button>
+                    </>
+                )}
             </CardActions>
         </Card>
     );

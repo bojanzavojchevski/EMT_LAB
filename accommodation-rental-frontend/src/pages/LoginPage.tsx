@@ -25,6 +25,7 @@ const LoginPage = () => {
             });
 
             tokenStorage.saveToken(response.token);
+            tokenStorage.saveRole(response.role);
             navigate("/");
         } catch {
             setError("Invalid email or password.");

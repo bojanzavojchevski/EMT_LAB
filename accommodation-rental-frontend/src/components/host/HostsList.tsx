@@ -4,9 +4,17 @@ import HostCard from "./HostCard";
 
 interface HostsListProps {
     hosts: Host[];
+    canManage: boolean;
+    onEdit: (host: Host) => void;
+    onDelete: (id: number) => void;
 }
 
-const HostsList = ({ hosts }: HostsListProps) => {
+const HostsList = ({
+                       hosts,
+                       canManage,
+                       onEdit,
+                       onDelete,
+                   }: HostsListProps) => {
     return (
         <Box
             sx={{
@@ -16,7 +24,13 @@ const HostsList = ({ hosts }: HostsListProps) => {
             }}
         >
             {hosts.map((host) => (
-                <HostCard key={host.id} host={host} />
+                <HostCard
+                    key={host.id}
+                    host={host}
+                    canManage={canManage}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
             ))}
         </Box>
     );

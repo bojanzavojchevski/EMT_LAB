@@ -4,6 +4,9 @@ import type { Host } from "../../types/host";
 
 interface HostCardProps {
     host: Host;
+    canManage: boolean;
+    onEdit: (host: Host) => void;
+    onDelete: (id: number) => void;
 }
 
 const getHostName = (host: Host) => {
@@ -18,7 +21,12 @@ const getHostName = (host: Host) => {
     return host.name;
 };
 
-const HostCard = ({ host }: HostCardProps) => {
+const HostCard = ({
+                      host,
+                      canManage,
+                      onEdit,
+                      onDelete,
+                  }: HostCardProps) => {
     return (
         <Card>
             <CardContent>
@@ -39,6 +47,22 @@ const HostCard = ({ host }: HostCardProps) => {
                 >
                     Details
                 </Button>
+
+                {canManage && (
+                    <>
+                        <Button size="small" onClick={() => onEdit(host)}>
+                            Edit
+                        </Button>
+
+                        <Button
+                            size="small"
+                            color="error"
+                            onClick={() => onDelete(host.id)}
+                        >
+                            Delete
+                        </Button>
+                    </>
+                )}
             </CardActions>
         </Card>
     );

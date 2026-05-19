@@ -4,9 +4,17 @@ import CountryCard from "./CountryCard";
 
 interface CountriesListProps {
     countries: Country[];
+    canManage: boolean;
+    onEdit: (country: Country) => void;
+    onDelete: (id: number) => void;
 }
 
-const CountriesList = ({ countries }: CountriesListProps) => {
+const CountriesList = ({
+                           countries,
+                           canManage,
+                           onEdit,
+                           onDelete,
+                       }: CountriesListProps) => {
     return (
         <Box
             sx={{
@@ -16,7 +24,13 @@ const CountriesList = ({ countries }: CountriesListProps) => {
             }}
         >
             {countries.map((country) => (
-                <CountryCard key={country.id} country={country} />
+                <CountryCard
+                    key={country.id}
+                    country={country}
+                    canManage={canManage}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
             ))}
         </Box>
     );

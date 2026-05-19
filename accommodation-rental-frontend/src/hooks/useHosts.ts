@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
-import type { Host } from "../types/host";
+import { useCallback, useEffect, useState } from "react";
+import type {
+    CreateHostRequest,
+    Host,
+    UpdateHostRequest,
+} from "../types/host";
 import hostRepository from "../api/hostRepository";
 
 const useHosts = () => {
@@ -7,7 +11,10 @@ const useHosts = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const fetchHosts = useCallback(() => {
+        setLoading(true);
+        setError(null);
+
         hostRepository.findAll()
             .then((data) => {
                 setHosts(data);
@@ -20,10 +27,33 @@ const useHosts = () => {
             });
     }, []);
 
+    useEffect(() => {
+        fetchHosts();
+    }, [fetchHosts]);
+
+    const createHost = async (request: CreateHostRequest) => {
+        await hostRepository.create(request);
+        fetchHosts();
+    };
+
+    const updateHost = async (id: number, request: UpdateHostRequest) => {
+        await hostRepository.update(id, request);
+        fetchHosts();
+    };
+
+    const deleteHost = async (id: number) => {
+        await hostRepository.deleteById(id);
+        fetchHosts();
+    };
+
     return {
         hosts,
         loading,
         error,
+        refetch: fetchHosts,
+        createHost,
+        updateHost,
+        deleteHost,
     };
 };
 

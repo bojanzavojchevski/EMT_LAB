@@ -27,6 +27,7 @@ const RegisterPage = () => {
             });
 
             tokenStorage.saveToken(response.token);
+            tokenStorage.saveRole(response.role);
             navigate("/");
         } catch {
             setError("Registration failed. The email may already be in use.");

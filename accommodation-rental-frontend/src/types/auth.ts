@@ -11,4 +11,5 @@ export interface LoginRequest {
 
 export interface AuthenticationResponse {
     token: string;
+    role: string;
 }

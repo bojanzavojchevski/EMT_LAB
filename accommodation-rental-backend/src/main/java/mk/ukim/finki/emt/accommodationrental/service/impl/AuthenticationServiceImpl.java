@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String token = jwtService.generateToken(savedUser);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponse(token, savedUser.getRole().name());
     }
 
     @Override
@@ -56,6 +56,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String token = jwtService.generateToken(user);
 
-        return new AuthenticationResponse(token);
+        return new AuthenticationResponse(token, user.getRole().name());
     }
 }

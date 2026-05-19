@@ -32,17 +32,25 @@ const Header = () => {
                     Home
                 </Button>
 
-                <Button color="inherit" component={RouterLink} to="/accommodations">
-                    Accommodations
-                </Button>
+                {isAuthenticated && (
+                    <>
+                        <Button color="inherit" component={RouterLink} to="/accommodations">
+                            Accommodations
+                        </Button>
 
-                <Button color="inherit" component={RouterLink} to="/hosts">
-                    Hosts
-                </Button>
+                        <Button color="inherit" component={RouterLink} to="/hosts">
+                            Hosts
+                        </Button>
 
-                <Button color="inherit" component={RouterLink} to="/countries">
-                    Countries
-                </Button>
+                        <Button color="inherit" component={RouterLink} to="/countries">
+                            Countries
+                        </Button>
+
+                        <Button color="inherit" onClick={handleLogout}>
+                            Logout
+                        </Button>
+                    </>
+                )}
 
                 {!isAuthenticated && (
                     <>
@@ -54,12 +62,6 @@ const Header = () => {
                             Register
                         </Button>
                     </>
-                )}
-
-                {isAuthenticated && (
-                    <Button color="inherit" onClick={handleLogout}>
-                        Logout
-                    </Button>
                 )}
             </Toolbar>
         </AppBar>

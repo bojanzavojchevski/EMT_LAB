@@ -4,9 +4,17 @@ import AccommodationCard from "./AccommodationCard";
 
 interface AccommodationsListProps {
     accommodations: Accommodation[];
+    canManage: boolean;
+    onEdit: (accommodation: Accommodation) => void;
+    onDelete: (id: number) => void;
 }
 
-const AccommodationsList = ({ accommodations }: AccommodationsListProps) => {
+const AccommodationsList = ({
+                                accommodations,
+                                canManage,
+                                onEdit,
+                                onDelete,
+                            }: AccommodationsListProps) => {
     return (
         <Box
             sx={{
@@ -19,6 +27,9 @@ const AccommodationsList = ({ accommodations }: AccommodationsListProps) => {
                 <AccommodationCard
                     key={accommodation.id}
                     accommodation={accommodation}
+                    canManage={canManage}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
                 />
             ))}
         </Box>

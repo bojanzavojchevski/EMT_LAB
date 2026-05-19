@@ -53,18 +53,18 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // Public READ endpoints for the React UI
-                        .requestMatchers(HttpMethod.GET, "/api/accommodations/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/hosts/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/accommodation-details-view/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/accommodation-category-stats/**").permitAll()
+                        // READ endpoints require logged-in USER or ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/accommodations/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/hosts/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/countries/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/accommodation-details-view/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/accommodation-category-stats/**").hasAnyRole("USER", "ADMIN")
 
                         // Activity logs should not be public
                         .requestMatchers(HttpMethod.GET, "/api/activity-logs/**").hasRole("ADMIN")
 
                         // Renting can be done by logged-in users
-                        .requestMatchers(HttpMethod.POST, "/api/accommodations/*/rent").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/accommodations/*/rent").hasAnyRole("USER", "ADMIN")
 
                         // Reviews can be created by logged-in users
                         .requestMatchers(HttpMethod.POST, "/api/accommodations/*/reviews").hasAnyRole("USER", "ADMIN")
@@ -115,6 +115,7 @@ public class SecurityConfig {
                 "GET",
                 "POST",
                 "PUT",
+                "PATCH",
                 "DELETE",
                 "OPTIONS"
         ));

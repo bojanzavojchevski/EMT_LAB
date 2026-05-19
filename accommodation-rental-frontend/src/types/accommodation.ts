@@ -10,3 +10,19 @@ export interface Accommodation {
     hostFullName?: string;
     hostCountry?: string;
 }
+
+export interface CreateAccommodationRequest {
+    name: string;
+    category: string;
+    hostId: number;
+    numRooms: number;
+    condition: string;
+}
+
+export interface UpdateAccommodationRequest {
+    name: string;
+    category: string;
+    hostId: number;
+    numRooms: number;
+    condition: string;
+}
