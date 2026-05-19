@@ -66,6 +66,9 @@ public class SecurityConfig {
                         // Renting can be done by logged-in users
                         .requestMatchers(HttpMethod.POST, "/api/accommodations/*/rent").hasAnyRole("USER", "ADMIN")
 
+                        // Reviews can be created by logged-in users
+                        .requestMatchers(HttpMethod.POST, "/api/accommodations/*/reviews").hasAnyRole("USER", "ADMIN")
+
                         // Accommodation write operations
                         .requestMatchers(HttpMethod.POST, "/api/accommodations/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/accommodations/**").hasRole("ADMIN")
